@@ -74,6 +74,7 @@ class Block{
         return shapeMap[key]
     }
     rotate(){
+        this.lastBlock=this.block
         if(this.origin.x+this.block.length>20){
             return
         }
@@ -210,9 +211,13 @@ class Game{
         if(e.key==='w'){
             this.reSetBlock()
             this.curr.rotate()
-
-
+            //debugger
+            console.log(this.moveDownCheck())
+            if(!this.moveDownCheck()){
+                this.curr.block=this.curr.lastBlock
+            }
             this.refView()
+
         }
     }
     start(){
