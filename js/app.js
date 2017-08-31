@@ -74,6 +74,9 @@ class Block{
         return shapeMap[key]
     }
     rotate(){
+        if(this.origin.x+this.block.length>20){
+            return
+        }
         var res=[]
         this.block.forEach((i,ind)=>{
             i.forEach((k,knd)=>{
@@ -87,6 +90,11 @@ class Block{
         if(this.origin.y<0){
             this.origin.y=0
         }
+        //debugger
+        if(this.origin.y+this.block[0].length>10){
+            this.origin.y=10-this.block[0].length
+        }
+
     }
 }
 class Game{
@@ -189,7 +197,7 @@ class Game{
     }
     keyEvent(e){
 
-        debugger
+
         if(e.key==='s'){
             this.down()
         }
