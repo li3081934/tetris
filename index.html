@@ -8,17 +8,20 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+
         }
         .cell{
             /*border: 1px red solid;*/
             width:20px;
             height: 20px;
             display: inline-block;
+
         }
-        #wrap{
+        .game{
             width: 202px;
             font-size: 0;
             border:1px darkgray solid;
+
         }
         .blue{
             background: lightblue;
@@ -58,16 +61,73 @@
             font-size: 0;
             border:1px darkgray solid;
         }
+        #wrap{
+            text-align: center;
+            padding-top: 50px;
+        }
+        #wrap >div{
+            display: inline-block;
+            margin: 0 20px;
+            vertical-align: text-top;
+
+        }
+        .mask{
+            height: 100%;
+            background: rgba(0,0,0,.4);
+            position: absolute;
+            left: 50%;
+            top:50%;
+            transform: translate(-50%,-50%);
+            width: 100%;
+            line-height: 50px;
+            cursor: pointer;
+            transition:all  0.4s;
+        }
+        .mask:hover{
+            color: orangered;
+        }
+        .maskMove{
+            top:-50%;
+            opacity: 0;
+        }
+        .gameWrap{
+            position: relative;
+        }
 
     </style>
 </head>
 <body>
-    <div id="wrap"></div>
-    <div id="next"></div>
+    <div id="wrap">
+        <div class="gameWrap">
+            <div class="game"></div>
+            <div class="mask">
+                START!!
+            </div>
+        </div>
+        <div id="next"></div>
+    </div>
 
-    <button id="down">start</button>
-    <button id="right">pause</button>
+
 
 </body>
 <script src="js/app.js"></script>
+<script>
+    var game=new Game(document.querySelector('.game'))
+    game.initGame()
+
+    document.querySelector('.mask').onclick=function(){
+        this.className+=' maskMove'
+        //game.start()
+        if(this.innerHTML.indexOf('START!!')===-1){
+            game.reStart()
+        }else{
+            game.start()
+        }
+
+    }
+    document.querySelector('#right').onclick=()=>{
+        game.pause()
+    }
+
+</script>
 </html>

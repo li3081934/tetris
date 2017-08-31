@@ -67,7 +67,7 @@ class Block{
 
     }
     getRandom(shapeMap){
-        debugger
+        //debugger
         let random=Math.floor(Math.random()*7)
         let key=Object.keys(shapeMap)[random]
 
@@ -125,7 +125,7 @@ class Game{
     initGame(){
         let html='';
         //debugger
-        console.log(this.container)
+        //console.log(this.container)
         this.container.forEach(i=>{
 
             i.forEach(k=>{
@@ -160,32 +160,75 @@ class Game{
         //todo :硬编码
         document.querySelector('#next').innerHTML=html
     }
+    end(){
+
+        clearInterval(this.timer)
+        let mask=document.querySelector('.mask')
+        mask.innerHTML='YOU FUCKED!!<p>RESTATR</p>'
+        mask.className='mask';
+
+
+
+
+    }
+    reSetAll(){
+        this.container.forEach((i,ind)=>{
+            i.forEach((k,knd)=>{
+                if(k!==0){
+                    this.container[ind][knd]=0
+                }
+            })
+        })
+        this.nextContainer.forEach((i,ind)=>{
+            i.forEach((k,knd)=>{
+                if(k!==0){
+                    this.container[ind][knd]=0
+                }
+            })
+        })
+    }
+    keyEvent(e){
+
+        debugger
+        if(e.key==='s'){
+            this.down()
+        }
+        if(e.key==='a'){
+            this.left()
+        }
+        if(e.key==='d'){
+            this.right()
+        }
+        if(e.key==='w'){
+            this.reSetBlock()
+            this.curr.rotate()
+
+
+            this.refView()
+        }
+    }
     start(){
+        //this.reSetAll()
+
         this.initNext()
-        this.curr=new Block('I')
+        this.curr=new Block()
         this.refView()
         this.timer=setInterval(()=>{
             this.down()
         },this.speed*1000)
-        window.addEventListener('keydown',(e)=>{
-            if(e.key==='s'){
-                this.down()
-            }
-            if(e.key==='a'){
-                this.left()
-            }
-            if(e.key==='d'){
-                this.right()
-            }
-            if(e.key==='w'){
-                this.reSetBlock()
-                this.curr.rotate()
-                debugger
 
-                this.refView()
-            }
-        })
+        window.addEventListener('keydown',this.keyEvent.bind(this))
 
+    }
+    reStart(){
+        this.reSetAll()
+
+        this.initNext()
+        this.curr=new Block()
+        this.refView()
+        this.timer=setInterval(()=>{
+            this.down()
+        },this.speed*1000)
     }
     pause(){
         clearInterval(this.timer)
@@ -318,7 +361,12 @@ class Game{
         //下轮开始
         this.curr=this.next;
         this.initNext()
-        this.initGame()
+        if(this.moveDownCheck()){
+            this.initGame()
+        }else{
+            this.end()
+        }
+
     }
     fullClear(boundary){
         for(let i=boundary;i>=0;i--){
@@ -360,13 +408,4 @@ class Game{
             this.refView()
         }
     }
-}
-var game=new Game(document.querySelector('#wrap'))
-game.initGame()
-
-document.querySelector('#down').onclick=()=>{
-    game.start()
-}
-document.querySelector('#right').onclick=()=>{
-    game.pause()
 }
